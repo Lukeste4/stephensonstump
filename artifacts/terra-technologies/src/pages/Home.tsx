@@ -93,7 +93,7 @@ export default function Home() {
       <header style={{
         background: "white",
         borderBottom: scrolled ? "1px solid #e8e8e8" : "1px solid transparent",
-        padding: scrolled ? "14px 7%" : "22px 7%",
+        padding: scrolled ? "14px 7%" : "30px 7%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -108,22 +108,22 @@ export default function Home() {
             src={stephensonLogo}
             alt="Stephenson Stump Grinding"
             style={{
-              height: scrolled ? 52 : 78,
-              width: scrolled ? 52 : 78,
+              height: scrolled ? 52 : 110,
+              width: scrolled ? 52 : 110,
               objectFit: "contain",
               transition: "height 0.3s ease, width 0.3s ease",
             }}
           />
           <div>
             <div style={{
-              fontSize: scrolled ? "1.1rem" : "1.4rem",
+              fontSize: scrolled ? "1.1rem" : "1.96rem",
               fontWeight: 600,
               letterSpacing: "-0.5px",
               transition: "font-size 0.3s ease",
             }}>Stephenson Stump Grinding</div>
             <div style={{
               color: "#666",
-              fontSize: scrolled ? "0.8rem" : "0.95rem",
+              fontSize: scrolled ? "0.8rem" : "1.33rem",
               transition: "font-size 0.3s ease",
             }}>Professional Stump Grinding</div>
           </div>
