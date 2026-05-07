@@ -59,7 +59,7 @@ export default function Home() {
     []
   );
 
-  const stumpCount = stumps.length;
+  const stumpCount = stumps.filter((s) => parseFloat(s.diameter) > 0).length;
   const stumpAreaTotal = stumps.reduce((acc, s) => acc + calculateStumpCost(s), 0);
 
   const baseTotal = BASE_SERVICE_FEE + stumpAreaTotal;
