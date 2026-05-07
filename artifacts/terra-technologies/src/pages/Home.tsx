@@ -241,7 +241,7 @@ export default function Home() {
                 <img
                   src={image}
                   alt={title}
-                  style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                  style={{ width: "100%", height: "auto", display: "block" }}
                 />
               )}
               <div style={{ padding: 30 }}>
