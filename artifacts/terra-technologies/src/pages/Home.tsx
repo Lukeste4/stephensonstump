@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import QuoteModal from "@/components/QuoteModal";
 import stephensonLogo from "@/assets/stephenson_logo.png";
 
@@ -29,6 +29,13 @@ export default function Home() {
   const [servicePackage, setServicePackage] = useState("0");
   const [invalidIds, setInvalidIds] = useState<Set<number>>(new Set());
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const addStump = () => {
     const emptyIds = stumps
@@ -85,20 +92,40 @@ export default function Home() {
       {/* HEADER */}
       <header style={{
         background: "white",
-        borderBottom: "1px solid #e8e8e8",
-        padding: "20px 7%",
+        borderBottom: scrolled ? "1px solid #e8e8e8" : "1px solid transparent",
+        padding: scrolled ? "14px 7%" : "22px 7%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         position: "sticky",
         top: 0,
         zIndex: 100,
+        transition: "padding 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+        boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.07)" : "none",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img src={stephensonLogo} alt="Stephenson Stump Grinding" style={{ height: 56, width: 56, objectFit: "contain" }} />
+          <img
+            src={stephensonLogo}
+            alt="Stephenson Stump Grinding"
+            style={{
+              height: scrolled ? 52 : 78,
+              width: scrolled ? 52 : 78,
+              objectFit: "contain",
+              transition: "height 0.3s ease, width 0.3s ease",
+            }}
+          />
           <div>
-            <div style={{ fontSize: "1.1rem", fontWeight: 600, letterSpacing: "-0.5px" }}>Stephenson Stump Grinding</div>
-            <div style={{ color: "#666", fontSize: "0.85rem" }}>Professional Stump Grinding</div>
+            <div style={{
+              fontSize: scrolled ? "1.1rem" : "1.4rem",
+              fontWeight: 600,
+              letterSpacing: "-0.5px",
+              transition: "font-size 0.3s ease",
+            }}>Stephenson Stump Grinding</div>
+            <div style={{
+              color: "#666",
+              fontSize: scrolled ? "0.8rem" : "0.95rem",
+              transition: "font-size 0.3s ease",
+            }}>Professional Stump Grinding</div>
           </div>
         </div>
         <div style={{ color: "#555", fontWeight: 500 }}>Ames, Iowa</div>
