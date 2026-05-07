@@ -25,8 +25,16 @@ export default function Home() {
   ]);
   const [nextId, setNextId] = useState(2);
   const [servicePackage, setServicePackage] = useState("0");
+  const [invalidIds, setInvalidIds] = useState<Set<number>>(new Set());
 
   const addStump = () => {
+    const emptyIds = stumps
+      .filter((s) => !s.diameter || isNaN(parseFloat(s.diameter)))
+      .map((s) => s.id);
+    if (emptyIds.length > 0) {
+      setInvalidIds(new Set(emptyIds));
+      return;
+    }
     setStumps((prev) => [...prev, { id: nextId, diameter: "", deep: false }]);
     setNextId((n) => n + 1);
   };
@@ -40,6 +48,13 @@ export default function Home() {
       setStumps((prev) =>
         prev.map((s) => (s.id === id ? { ...s, [field]: value } : s))
       );
+      if (field === "diameter" && typeof value === "string" && parseFloat(value) > 0) {
+        setInvalidIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      }
     },
     []
   );
@@ -274,7 +289,14 @@ export default function Home() {
                     onChange={e => updateStump(stump.id, "diameter", e.target.value)}
                     style={{
                       width: "100%", padding: 14, borderRadius: 12,
-                      border: "1px solid #ccc", fontSize: "1rem", background: "white",
+                      border: invalidIds.has(stump.id)
+                        ? "2px solid #dc2626"
+                        : "1px solid #ccc",
+                      outline: invalidIds.has(stump.id)
+                        ? "3px solid #fca5a5"
+                        : "none",
+                      fontSize: "1rem", background: "white",
+                      transition: "border 0.15s ease, outline 0.15s ease",
                     }}
                   />
                 </div>
