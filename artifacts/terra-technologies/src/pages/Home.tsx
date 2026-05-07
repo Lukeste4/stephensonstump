@@ -164,14 +164,41 @@ export default function Home() {
           <p style={{ color: "#666" }}>Enter stump diameters below to estimate your project cost.</p>
         </div>
 
-        {/* TWO-COLUMN LAYOUT: stumps left, summary right */}
+        {/* TWO-COLUMN LAYOUT */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 28, alignItems: "start" }} className="calc-layout">
 
-          {/* LEFT: stump entries + service package */}
+          {/* LEFT: service package (top) + stump entries + add button */}
           <div style={{
             background: "white", padding: 40, borderRadius: 30,
             border: "1px solid #e8e8e8", boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
           }}>
+
+            {/* SERVICE PACKAGE — above stump boxes */}
+            <div style={{ marginBottom: 28 }}>
+              <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
+                Choose Service Package
+              </label>
+              <select
+                value={servicePackage}
+                onChange={e => setServicePackage(e.target.value)}
+                style={{
+                  width: "100%", padding: 14, borderRadius: 12,
+                  border: "1px solid #ccc", fontSize: "1rem", background: "white",
+                }}
+              >
+                <option value="0">Stump Removal (Leave Wood Chips On Property)</option>
+                <option value="0.75">
+                  {"Stump Removal + Chip & Debris Removal" +
+                    (discountedTotal > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : "")}
+                </option>
+                <option value="1.05">
+                  {"Removal + Debris Removal + Top Soil & Seed Mat" +
+                    (discountedTotal > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : "")}
+                </option>
+              </select>
+            </div>
+
+            {/* STUMP ENTRIES */}
             {stumps.map((stump, index) => (
               <div key={stump.id} style={{
                 background: "#fafafa", border: "1px solid #ddd",
@@ -185,7 +212,17 @@ export default function Home() {
                       style={{
                         border: "1px solid #ddd", background: "white", color: "#666",
                         padding: "6px 12px", borderRadius: 8, cursor: "pointer",
-                        fontSize: "0.8rem", fontWeight: 500,
+                        fontSize: "0.8rem", fontWeight: 500, transition: "all 0.15s ease",
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = "#fee2e2";
+                        e.currentTarget.style.borderColor = "#f87171";
+                        e.currentTarget.style.color = "#dc2626";
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = "white";
+                        e.currentTarget.style.borderColor = "#ddd";
+                        e.currentTarget.style.color = "#666";
                       }}
                     >
                       Remove
@@ -227,37 +264,13 @@ export default function Home() {
               style={{
                 border: "none", background: "#111", color: "white",
                 padding: "14px 22px", borderRadius: 14, fontWeight: 600,
-                cursor: "pointer", fontSize: "1rem", marginBottom: 30,
+                cursor: "pointer", fontSize: "1rem",
               }}
               onMouseEnter={e => (e.currentTarget.style.background = "#2b2b2b")}
               onMouseLeave={e => (e.currentTarget.style.background = "#111")}
             >
               + Add Another Stump
             </button>
-
-            <div>
-              <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
-                Choose Service Package
-              </label>
-              <select
-                value={servicePackage}
-                onChange={e => setServicePackage(e.target.value)}
-                style={{
-                  width: "100%", padding: 14, borderRadius: 12,
-                  border: "1px solid #ccc", fontSize: "1rem", background: "white",
-                }}
-              >
-                <option value="0">Stump Removal (Leave Wood Chips On Property)</option>
-                <option value="0.75">
-                  Stump Removal + Chip & Debris Removal
-                  {discountedTotal > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : ""}
-                </option>
-                <option value="1.05">
-                  Removal + Debris Removal + Top Soil & Seed Mat
-                  {discountedTotal > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : ""}
-                </option>
-              </select>
-            </div>
           </div>
 
           {/* RIGHT: sticky estimated total */}
