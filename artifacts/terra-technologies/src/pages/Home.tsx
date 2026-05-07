@@ -7,32 +7,27 @@ const SALES_TAX = 0.07;
 interface Stump {
   id: number;
   diameter: string;
-  quantity: string;
   deep: boolean;
 }
 
-function calculateStumpCost(stump: Stump): { cost: number; count: number } {
+function calculateStumpCost(stump: Stump): number {
   const diameter = parseFloat(stump.diameter) || 0;
-  const quantity = parseInt(stump.quantity) || 0;
   const radius = diameter / 2;
   const area = Math.PI * radius * radius;
   let stumpPrice = area * PRICE_PER_SQ_IN;
   if (stump.deep) stumpPrice *= 1.2;
-  return { cost: stumpPrice * quantity, count: quantity };
+  return stumpPrice;
 }
 
 export default function Home() {
   const [stumps, setStumps] = useState<Stump[]>([
-    { id: 1, diameter: "", quantity: "1", deep: false },
+    { id: 1, diameter: "", deep: false },
   ]);
   const [nextId, setNextId] = useState(2);
   const [servicePackage, setServicePackage] = useState("0");
 
   const addStump = () => {
-    setStumps((prev) => [
-      ...prev,
-      { id: nextId, diameter: "", quantity: "1", deep: false },
-    ]);
+    setStumps((prev) => [...prev, { id: nextId, diameter: "", deep: false }]);
     setNextId((n) => n + 1);
   };
 
@@ -49,18 +44,12 @@ export default function Home() {
     []
   );
 
-  const totals = stumps.reduce(
-    (acc, s) => {
-      const { cost, count } = calculateStumpCost(s);
-      return { cost: acc.cost + cost, count: acc.count + count };
-    },
-    { cost: 0, count: 0 }
-  );
+  const stumpCount = stumps.length;
+  const stumpAreaTotal = stumps.reduce((acc, s) => acc + calculateStumpCost(s), 0);
 
-  const baseTotal = BASE_SERVICE_FEE + totals.cost;
-  const discountRate =
-    totals.count >= 7 ? 0.15 : totals.count >= 3 ? 0.1 : 0;
-  const discountAmount = totals.cost * discountRate;
+  const baseTotal = BASE_SERVICE_FEE + stumpAreaTotal;
+  const discountRate = stumpCount >= 7 ? 0.15 : stumpCount >= 3 ? 0.1 : 0;
+  const discountAmount = stumpAreaTotal * discountRate;
   const discountedTotal = baseTotal - discountAmount;
   const serviceMultiplier = parseFloat(servicePackage);
   const serviceCost = discountedTotal * serviceMultiplier;
@@ -175,31 +164,34 @@ export default function Home() {
           <p style={{ color: "#666" }}>Enter stump diameters below to estimate your project cost.</p>
         </div>
 
-        <div style={{
-          background: "white", padding: 40, borderRadius: 30,
-          border: "1px solid #e8e8e8", boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
-        }}>
-          {stumps.map((stump, index) => (
-            <div key={stump.id} style={{
-              background: "#fafafa", border: "1px solid #ddd",
-              borderRadius: 22, padding: 24, marginBottom: 22,
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-                <h4 style={{ fontWeight: 600 }}>Stump #{index + 1}</h4>
-                {stumps.length > 1 && (
-                  <button
-                    onClick={() => removeStump(stump.id)}
-                    style={{
-                      border: "1px solid #ddd", background: "white", color: "#666",
-                      padding: "6px 12px", borderRadius: 8, cursor: "pointer",
-                      fontSize: "0.8rem", fontWeight: 500,
-                    }}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+        {/* TWO-COLUMN LAYOUT: stumps left, summary right */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 28, alignItems: "start" }} className="calc-layout">
+
+          {/* LEFT: stump entries + service package */}
+          <div style={{
+            background: "white", padding: 40, borderRadius: 30,
+            border: "1px solid #e8e8e8", boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
+          }}>
+            {stumps.map((stump, index) => (
+              <div key={stump.id} style={{
+                background: "#fafafa", border: "1px solid #ddd",
+                borderRadius: 22, padding: 24, marginBottom: 22,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+                  <h4 style={{ fontWeight: 600 }}>Stump #{index + 1}</h4>
+                  {stumps.length > 1 && (
+                    <button
+                      onClick={() => removeStump(stump.id)}
+                      style={{
+                        border: "1px solid #ddd", background: "white", color: "#666",
+                        padding: "6px 12px", borderRadius: 8, cursor: "pointer",
+                        fontSize: "0.8rem", fontWeight: 500,
+                      }}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
                 <div>
                   <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
                     Diameter (inches)
@@ -215,103 +207,94 @@ export default function Home() {
                     }}
                   />
                 </div>
-                <div>
-                  <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
-                    Quantity
-                  </label>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 16 }}>
                   <input
-                    type="number"
-                    value={stump.quantity}
-                    min={1}
-                    onChange={e => updateStump(stump.id, "quantity", e.target.value)}
-                    style={{
-                      width: "100%", padding: 14, borderRadius: 12,
-                      border: "1px solid #ccc", fontSize: "1rem", background: "white",
-                    }}
+                    type="checkbox"
+                    checked={stump.deep}
+                    onChange={e => updateStump(stump.id, "deep", e.target.checked)}
+                    style={{ transform: "scale(1.2)", cursor: "pointer" }}
+                    id={`deep-${stump.id}`}
                   />
+                  <label htmlFor={`deep-${stump.id}`} style={{ cursor: "pointer" }}>
+                    Extra Depth Grinding (10–12") (+20%)
+                  </label>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 16 }}>
-                <input
-                  type="checkbox"
-                  checked={stump.deep}
-                  onChange={e => updateStump(stump.id, "deep", e.target.checked)}
-                  style={{ transform: "scale(1.2)", cursor: "pointer" }}
-                  id={`deep-${stump.id}`}
-                />
-                <label htmlFor={`deep-${stump.id}`} style={{ cursor: "pointer" }}>
-                  Extra Depth Grinding (10–12") (+20%)
-                </label>
-              </div>
-            </div>
-          ))}
+            ))}
 
-          <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
             <button
               onClick={addStump}
               style={{
                 border: "none", background: "#111", color: "white",
                 padding: "14px 22px", borderRadius: 14, fontWeight: 600,
-                cursor: "pointer", fontSize: "1rem",
+                cursor: "pointer", fontSize: "1rem", marginBottom: 30,
               }}
               onMouseEnter={e => (e.currentTarget.style.background = "#2b2b2b")}
               onMouseLeave={e => (e.currentTarget.style.background = "#111")}
             >
               + Add Another Stump
             </button>
+
+            <div>
+              <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
+                Choose Service Package
+              </label>
+              <select
+                value={servicePackage}
+                onChange={e => setServicePackage(e.target.value)}
+                style={{
+                  width: "100%", padding: 14, borderRadius: 12,
+                  border: "1px solid #ccc", fontSize: "1rem", background: "white",
+                }}
+              >
+                <option value="0">Stump Removal (Leave Wood Chips On Property)</option>
+                <option value="0.75">
+                  Stump Removal + Chip & Debris Removal
+                  {discountedTotal > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : ""}
+                </option>
+                <option value="1.05">
+                  Removal + Debris Removal + Top Soil & Seed Mat
+                  {discountedTotal > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : ""}
+                </option>
+              </select>
+            </div>
           </div>
 
-          <div style={{ marginTop: 30 }}>
-            <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: "0.9rem" }}>
-              Choose Service Package
-            </label>
-            <select
-              value={servicePackage}
-              onChange={e => setServicePackage(e.target.value)}
-              style={{
-                width: "100%", padding: 14, borderRadius: 12,
-                border: "1px solid #ccc", fontSize: "1rem", background: "white",
-              }}
-            >
-              <option value="0">Stump Removal (Leave Wood Chips On Property)</option>
-              <option value="0.75">
-                Stump Removal + Chip & Debris Removal
-                {discountedTotal > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : ""}
-              </option>
-              <option value="1.05">
-                Removal + Debris Removal + Top Soil & Seed Mat
-                {discountedTotal > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : ""}
-              </option>
-            </select>
-          </div>
-
-          {/* SUMMARY */}
+          {/* RIGHT: sticky estimated total */}
           <div style={{
-            marginTop: 36, background: "#111", color: "white",
+            position: "sticky",
+            top: 90,
+            background: "#111", color: "white",
             borderRadius: 24, padding: 30,
+            boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
           }}>
-            <h4 style={{ marginBottom: 20, fontSize: "1.7rem", fontWeight: 700 }}>Estimated Total</h4>
+            <h4 style={{ marginBottom: 20, fontSize: "1.5rem", fontWeight: 700 }}>Estimated Total</h4>
             {[
-              ["Total Stumps", totals.count.toString()],
+              ["Total Stumps", stumpCount.toString()],
               ["Base Grinding Cost", `$${baseTotal.toFixed(2)}`],
               ["Discount Applied", `${(discountRate * 100).toFixed(0)}%`],
               ["Service Package Cost", `$${serviceCost.toFixed(2)}`],
-              ["Ames, IA Sales Tax (7%)", `$${taxAmount.toFixed(2)}`],
+              ["Sales Tax (7%)", `$${taxAmount.toFixed(2)}`],
               ["Final Estimated Price", `$${finalTotal.toFixed(2)}`],
             ].map(([label, value], i, arr) => (
               <div key={label} style={{
                 display: "flex", justifyContent: "space-between",
-                padding: "12px 0",
+                padding: "12px 0", gap: 8,
                 borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
               }}>
-                <span>{label}</span>
-                <strong style={i === arr.length - 1 ? { fontSize: "1.1rem" } : {}}>{value}</strong>
+                <span style={{ fontSize: "0.9rem", color: i === arr.length - 1 ? "white" : "#ccc" }}>{label}</span>
+                <strong style={{
+                  fontSize: i === arr.length - 1 ? "1.15rem" : "0.95rem",
+                  color: i === arr.length - 1 ? "#7cc76f" : "white",
+                  whiteSpace: "nowrap",
+                }}>{value}</strong>
               </div>
             ))}
-            <p style={{ marginTop: 20, color: "#cccccc", fontSize: "0.9rem" }}>
+            <p style={{ marginTop: 20, color: "#888", fontSize: "0.82rem" }}>
               Pricing updates automatically as measurements are entered.
             </p>
           </div>
+
         </div>
       </section>
 
@@ -369,6 +352,9 @@ export default function Home() {
           .hero-section h2 {
             font-size: 2.7rem !important;
             letter-spacing: -1.5px !important;
+          }
+          .calc-layout {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
