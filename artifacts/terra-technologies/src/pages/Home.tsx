@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import QuoteModal from "@/components/QuoteModal";
 import stephensonLogo from "@/assets/stephenson_logo.png";
 import stumpGrindLeafMulch from "@/assets/stump_grind_leave_mulch.jpg";
+import stumpGrindRemoveMulch from "@/assets/stump_grind_remove_mulch.png";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -225,7 +226,7 @@ export default function Home() {
             {
               title: "Grinding + Cleanup",
               desc: "Includes chip and debris removal for a cleaner finished appearance.",
-              image: null,
+              image: stumpGrindRemoveMulch,
             },
             {
               title: "Full Lawn Restoration",
