@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Terra Technologies"
+version = "1.0.0"
+id = "artifacts/terra-technologies"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19150
+
+[services.development]
+run = "pnpm --filter @workspace/terra-technologies run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/terra-technologies", "run", "build" ]
+publicDir = "artifacts/terra-technologies/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19150"
+BASE_PATH = "/"
