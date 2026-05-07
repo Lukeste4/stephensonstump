@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import QuoteModal from "@/components/QuoteModal";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -26,6 +27,7 @@ export default function Home() {
   const [nextId, setNextId] = useState(2);
   const [servicePackage, setServicePackage] = useState("0");
   const [invalidIds, setInvalidIds] = useState<Set<number>>(new Set());
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
 
   const addStump = () => {
     const emptyIds = stumps
@@ -362,6 +364,22 @@ export default function Home() {
             <p style={{ marginTop: 20, color: "#888", fontSize: "0.82rem" }}>
               Pricing updates automatically as measurements are entered.
             </p>
+            <button
+              onClick={() => setQuoteModalOpen(true)}
+              disabled={stumpCount === 0}
+              style={{
+                marginTop: 20, width: "100%", border: "none",
+                background: stumpCount === 0 ? "#333" : "#7cc76f",
+                color: stumpCount === 0 ? "#666" : "#111",
+                padding: "14px 20px", borderRadius: 12, fontWeight: 700,
+                cursor: stumpCount === 0 ? "not-allowed" : "pointer",
+                fontSize: "1rem", transition: "background 0.2s",
+              }}
+              onMouseEnter={e => { if (stumpCount > 0) e.currentTarget.style.background = "#6ab562"; }}
+              onMouseLeave={e => { if (stumpCount > 0) e.currentTarget.style.background = "#7cc76f"; }}
+            >
+              Request a Quote
+            </button>
           </div>
 
         </div>
@@ -377,6 +395,15 @@ export default function Home() {
           Professional stump grinding and property restoration services.
         </p>
       </footer>
+
+      <QuoteModal
+        isOpen={quoteModalOpen}
+        onClose={() => setQuoteModalOpen(false)}
+        stumpCount={stumpCount}
+        servicePackage={servicePackage}
+        servicePackageLabel=""
+        estimatedTotal={finalTotal}
+      />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');

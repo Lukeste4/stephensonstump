@@ -14,3 +14,34 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary Submit a quote request
+ */
+export const CreateQuoteBody = zod.object({
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  address: zod.string(),
+  notes: zod.string().optional(),
+  stumpCount: zod.number(),
+  servicePackage: zod.string(),
+  estimatedTotal: zod.number(),
+});
+
+/**
+ * @summary List all quote requests
+ */
+export const ListQuotesResponseItem = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  address: zod.string(),
+  notes: zod.string(),
+  stumpCount: zod.number(),
+  servicePackage: zod.string(),
+  estimatedTotal: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListQuotesResponse = zod.array(ListQuotesResponseItem);

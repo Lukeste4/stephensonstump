@@ -8,3 +8,31 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface CreateQuoteBody {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  notes?: string;
+  stumpCount: number;
+  servicePackage: string;
+  estimatedTotal: number;
+}
+
+export interface Quote {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  notes: string;
+  stumpCount: number;
+  servicePackage: string;
+  estimatedTotal: string;
+  createdAt: string;
+}
+
+export interface ErrorResponse {
+  error: string;
+}
