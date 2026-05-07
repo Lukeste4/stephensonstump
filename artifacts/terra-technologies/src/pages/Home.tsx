@@ -155,6 +155,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SERVICES */}
+      <section style={{ padding: "80px 7% 0" }}>
+        <div style={{ marginBottom: 30 }}>
+          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
+            Service Packages
+          </h3>
+          <p style={{ color: "#666" }}>Flexible cleanup and restoration options available.</p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+          {[
+            {
+              title: "Standard Grinding",
+              desc: "Includes professional stump grinding with wood chips left on-site for mulch or compost use.",
+            },
+            {
+              title: "Grinding + Cleanup",
+              desc: "Includes chip and debris removal for a cleaner finished appearance.",
+            },
+            {
+              title: "Full Lawn Restoration",
+              desc: "Includes debris cleanup, top soil replacement, and grass seed mat installation.",
+            },
+          ].map(({ title, desc }) => (
+            <div key={title} style={{
+              background: "white", border: "1px solid #e8e8e8",
+              borderRadius: 24, padding: 30,
+            }}>
+              <h4 style={{ marginBottom: 14, fontWeight: 600, fontSize: "1.1rem" }}>{title}</h4>
+              <p style={{ color: "#555", lineHeight: 1.6, fontSize: "0.95rem" }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CALCULATOR */}
       <section style={{ padding: "80px 7%" }} id="calculator">
         <div style={{ marginBottom: 40 }}>
@@ -308,40 +342,6 @@ export default function Home() {
             </p>
           </div>
 
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <section style={{ padding: "0 7% 80px" }}>
-        <div style={{ marginBottom: 30 }}>
-          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
-            Service Packages
-          </h3>
-          <p style={{ color: "#666" }}>Flexible cleanup and restoration options available.</p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
-          {[
-            {
-              title: "Standard Grinding",
-              desc: "Includes professional stump grinding with wood chips left on-site for mulch or compost use.",
-            },
-            {
-              title: "Grinding + Cleanup",
-              desc: "Includes chip and debris removal for a cleaner finished appearance.",
-            },
-            {
-              title: "Full Lawn Restoration",
-              desc: "Includes debris cleanup, top soil replacement, and grass seed mat installation.",
-            },
-          ].map(({ title, desc }) => (
-            <div key={title} style={{
-              background: "white", border: "1px solid #e8e8e8",
-              borderRadius: 24, padding: 30,
-            }}>
-              <h4 style={{ marginBottom: 14, fontWeight: 600, fontSize: "1.1rem" }}>{title}</h4>
-              <p style={{ color: "#555", lineHeight: 1.6, fontSize: "0.95rem" }}>{desc}</p>
-            </div>
-          ))}
         </div>
       </section>
 
