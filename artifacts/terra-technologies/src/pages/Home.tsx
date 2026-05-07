@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import QuoteModal from "@/components/QuoteModal";
+import stephensonLogo from "@/assets/stephenson_logo.png";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -93,15 +94,10 @@ export default function Home() {
         top: 0,
         zIndex: 100,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: 14,
-            background: "linear-gradient(135deg,#234122,#7cc76f)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "white", fontSize: 22, fontWeight: 700,
-          }}>T</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <img src={stephensonLogo} alt="Stephenson Stump Grinding" style={{ height: 56, width: 56, objectFit: "contain" }} />
           <div>
-            <div style={{ fontSize: "1.1rem", fontWeight: 600, letterSpacing: "-0.5px" }}>Terra Technologies</div>
+            <div style={{ fontSize: "1.1rem", fontWeight: 600, letterSpacing: "-0.5px" }}>Stephenson Stump Grinding</div>
             <div style={{ color: "#666", fontSize: "0.85rem" }}>Professional Stump Grinding</div>
           </div>
         </div>
@@ -130,7 +126,7 @@ export default function Home() {
             Modern Stump Grinding Services
           </h2>
           <p style={{ color: "#555", lineHeight: 1.7, maxWidth: 620, fontSize: "1.05rem" }}>
-            Terra Technologies provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages. Typical grind depth is 4–6 inches below grade.
+            Stephenson Stump Grinding provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages. Typical grind depth is 4–6 inches below grade.
           </p>
           <div style={{ marginTop: 34 }}>
             <button
@@ -390,7 +386,7 @@ export default function Home() {
         background: "#111", color: "white",
         textAlign: "center", padding: "60px 20px",
       }}>
-        <h3 style={{ fontSize: "1.3rem", fontWeight: 600 }}>Terra Technologies</h3>
+        <h3 style={{ fontSize: "1.3rem", fontWeight: 600 }}>Stephenson Stump Grinding</h3>
         <p style={{ marginTop: 10, color: "#bfbfbf" }}>
           Professional stump grinding and property restoration services.
         </p>
