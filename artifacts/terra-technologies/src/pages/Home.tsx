@@ -215,9 +215,9 @@ export default function Home() {
                         fontSize: "0.8rem", fontWeight: 500, transition: "all 0.15s ease",
                       }}
                       onMouseEnter={e => {
-                        e.currentTarget.style.background = "#fee2e2";
-                        e.currentTarget.style.borderColor = "#f87171";
-                        e.currentTarget.style.color = "#dc2626";
+                        e.currentTarget.style.background = "#dc2626";
+                        e.currentTarget.style.borderColor = "#dc2626";
+                        e.currentTarget.style.color = "white";
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.background = "white";
