@@ -89,19 +89,30 @@ export default function Home() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh" }}>
 
+      {/* HEADER SPACER — prevents content from hiding under fixed header */}
+      <div style={{
+        height: scrolled ? 80 : 170,
+        transition: "height 0.3s ease",
+        flexShrink: 0,
+      }} />
+
       {/* HEADER */}
       <header style={{
         background: "white",
         borderBottom: scrolled ? "1px solid #e8e8e8" : "1px solid transparent",
-        padding: scrolled ? "14px 7%" : "30px 7%",
+        padding: "0 7%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        position: "sticky",
+        position: "fixed",
         top: 0,
+        left: 0,
+        right: 0,
+        height: scrolled ? 80 : 170,
         zIndex: 100,
-        transition: "padding 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+        transition: "height 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
         boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.07)" : "none",
+        overflow: "hidden",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <img
