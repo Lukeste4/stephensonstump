@@ -201,7 +201,7 @@ export default function Home() {
             </div>
           ))}
           <p style={{ marginTop: 24, color: "#cccccc", fontSize: "0.92rem" }}>
-            Deep grinding reaches approximately 10–12 inches below grade.
+            Deep grinding reaches approximately 15–18 inches below grade.
           </p>
         </div>
       </section>
