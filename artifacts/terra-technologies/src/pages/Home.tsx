@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import QuoteModal from "@/components/QuoteModal";
 import stephensonLogo from "@/assets/stephenson_logo.png";
+import stumpGrindLeafMulch from "@/assets/stump_grind_leave_mulch.jpg";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -219,22 +220,34 @@ export default function Home() {
             {
               title: "Standard Grinding",
               desc: "Includes professional stump grinding with wood chips left on-site for mulch or compost use.",
+              image: stumpGrindLeafMulch,
             },
             {
               title: "Grinding + Cleanup",
               desc: "Includes chip and debris removal for a cleaner finished appearance.",
+              image: null,
             },
             {
               title: "Full Lawn Restoration",
               desc: "Includes debris cleanup, top soil replacement, and grass seed mat installation.",
+              image: null,
             },
-          ].map(({ title, desc }) => (
+          ].map(({ title, desc, image }) => (
             <div key={title} style={{
               background: "white", border: "1px solid #e8e8e8",
-              borderRadius: 24, padding: 30,
+              borderRadius: 24, overflow: "hidden",
             }}>
-              <h4 style={{ marginBottom: 14, fontWeight: 600, fontSize: "1.1rem" }}>{title}</h4>
-              <p style={{ color: "#555", lineHeight: 1.6, fontSize: "0.95rem" }}>{desc}</p>
+              {image && (
+                <img
+                  src={image}
+                  alt={title}
+                  style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                />
+              )}
+              <div style={{ padding: 30 }}>
+                <h4 style={{ marginBottom: 14, fontWeight: 600, fontSize: "1.1rem" }}>{title}</h4>
+                <p style={{ color: "#555", lineHeight: 1.6, fontSize: "0.95rem" }}>{desc}</p>
+              </div>
             </div>
           ))}
         </div>
