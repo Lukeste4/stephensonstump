@@ -142,7 +142,25 @@ export default function Home() {
             }}>Professional Stump Grinding</div>
           </div>
         </div>
-        <div style={{ color: "#555", fontWeight: 500 }}>Ames, Iowa</div>
+        <a
+          href="tel:5154605650"
+          style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: "#2d5e2b", color: "white",
+            padding: scrolled ? "10px 18px" : "13px 22px",
+            borderRadius: 999, fontWeight: 600, textDecoration: "none",
+            fontSize: scrolled ? "0.9rem" : "1rem",
+            transition: "background 0.2s, padding 0.3s ease, font-size 0.3s ease",
+            whiteSpace: "nowrap",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = "#234122")}
+          onMouseLeave={e => (e.currentTarget.style.background = "#2d5e2b")}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
+          </svg>
+          (515) 460-5650
+        </a>
       </header>
 
       {/* HERO */}
