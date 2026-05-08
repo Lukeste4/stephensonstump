@@ -172,7 +172,7 @@ export default function Home() {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
           </svg>
-          {isMobile ? "Call Us" : "(515) 460-5650"}
+          {isMobile ? "Call Us" : "(515) 329-5923"}
         </button>
       </header>
 
@@ -505,7 +505,7 @@ export default function Home() {
                 fontSize: "inherit", textDecoration: "underline",
               }}
             >
-              (515) 460-5650
+              (515) 329-5923
             </button>{" "}
             and we'll be happy to help.
           </p>
@@ -536,7 +536,7 @@ export default function Home() {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
           </svg>
-          (515) 460-5650
+          (515) 329-5923
         </button>
       </footer>
 

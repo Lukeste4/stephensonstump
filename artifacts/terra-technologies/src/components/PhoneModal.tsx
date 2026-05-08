@@ -5,8 +5,8 @@ interface PhoneModalProps {
   onClose: () => void;
 }
 
-const PHONE_NUMBER = "5154605650";
-const DISPLAY_NUMBER = "(515) 460-5650";
+const PHONE_NUMBER = "5153295923";
+const DISPLAY_NUMBER = "(515) 329-5923";
 
 export default function PhoneModal({ isOpen, onClose }: PhoneModalProps) {
   useEffect(() => {
