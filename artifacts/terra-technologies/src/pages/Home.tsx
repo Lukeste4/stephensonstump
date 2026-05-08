@@ -33,11 +33,18 @@ export default function Home() {
   const [invalidIds, setInvalidIds] = useState<Set<number>>(new Set());
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   const addStump = () => {
@@ -94,7 +101,7 @@ export default function Home() {
 
       {/* HEADER SPACER — prevents content from hiding under fixed header */}
       <div style={{
-        height: scrolled ? 80 : 170,
+        height: isMobile ? 68 : scrolled ? 80 : 170,
         transition: "height 0.3s ease",
         flexShrink: 0,
       }} />
@@ -102,8 +109,8 @@ export default function Home() {
       {/* HEADER */}
       <header style={{
         background: "white",
-        borderBottom: scrolled ? "1px solid #e8e8e8" : "1px solid transparent",
-        padding: "0 7%",
+        borderBottom: (scrolled || isMobile) ? "1px solid #e8e8e8" : "1px solid transparent",
+        padding: isMobile ? "0 4%" : "0 7%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -111,55 +118,60 @@ export default function Home() {
         top: 0,
         left: 0,
         right: 0,
-        height: scrolled ? 80 : 170,
+        height: isMobile ? 68 : scrolled ? 80 : 170,
         zIndex: 100,
         transition: "height 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-        boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.07)" : "none",
+        boxShadow: (scrolled || isMobile) ? "0 2px 16px rgba(0,0,0,0.07)" : "none",
         overflow: "hidden",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 10 }}>
           <img
             src={stephensonLogo}
             alt="Stephenson Stump Grinding"
             style={{
-              height: scrolled ? 52 : 110,
-              width: scrolled ? 52 : 110,
+              height: isMobile ? 46 : scrolled ? 52 : 110,
+              width: isMobile ? 46 : scrolled ? 52 : 110,
               objectFit: "contain",
               transition: "height 0.3s ease, width 0.3s ease",
+              flexShrink: 0,
             }}
           />
           <div>
             <div style={{
-              fontSize: scrolled ? "1.1rem" : "1.96rem",
+              fontSize: isMobile ? "0.95rem" : scrolled ? "1.1rem" : "1.96rem",
               fontWeight: 600,
-              letterSpacing: "-0.5px",
+              letterSpacing: "-0.3px",
+              lineHeight: 1.2,
               transition: "font-size 0.3s ease",
             }}>Stephenson Stump Grinding</div>
-            <div style={{
-              color: "#666",
-              fontSize: scrolled ? "0.8rem" : "1.33rem",
-              transition: "font-size 0.3s ease",
-            }}>Professional Stump Grinding</div>
+            {!isMobile && (
+              <div style={{
+                color: "#666",
+                fontSize: scrolled ? "0.8rem" : "1.33rem",
+                transition: "font-size 0.3s ease",
+              }}>Professional Stump Grinding</div>
+            )}
           </div>
         </div>
         <a
           href="tel:5154605650"
           style={{
-            display: "flex", alignItems: "center", gap: 8,
+            display: "flex", alignItems: "center", gap: 6,
             background: "#2d5e2b", color: "white",
-            padding: scrolled ? "10px 18px" : "13px 22px",
+            padding: isMobile ? "9px 14px" : scrolled ? "10px 18px" : "13px 22px",
             borderRadius: 999, fontWeight: 600, textDecoration: "none",
-            fontSize: scrolled ? "0.9rem" : "1rem",
+            fontSize: isMobile ? "0.85rem" : scrolled ? "0.9rem" : "1rem",
             transition: "background 0.2s, padding 0.3s ease, font-size 0.3s ease",
             whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
           onMouseEnter={e => (e.currentTarget.style.background = "#234122")}
           onMouseLeave={e => (e.currentTarget.style.background = "#2d5e2b")}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
           </svg>
-          (515) 460-5650
+          {isMobile ? "Call Us" : "(515) 460-5650"}
         </a>
       </header>
 
