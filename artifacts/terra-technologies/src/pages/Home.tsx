@@ -235,7 +235,7 @@ export default function Home() {
             </div>
           ))}
           <p style={{ marginTop: 24, color: "#cccccc", fontSize: "0.92rem" }}>
-            Deep grinding reaches approximately 15–18 inches below grade.
+            Deep grinding is available for replanting or construction purposes and can reach around 15"–18" below grade.
           </p>
         </div>
       </section>
