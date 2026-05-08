@@ -285,6 +285,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SERVICE AREA */}
+      <section style={{ padding: "80px 7% 0" }}>
+        <div style={{ marginBottom: 36 }}>
+          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
+            Service Area
+          </h3>
+          <p style={{ color: "#666" }}>Proudly serving Ames and the surrounding Story County communities.</p>
+        </div>
+        <div style={{
+          background: "white", border: "1px solid #e8e8e8",
+          borderRadius: 28, padding: "40px 44px",
+        }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            {[
+              "Ames", "Ankeny", "Boone", "Nevada", "Huxley",
+              "Gilbert", "Story City", "Slater", "Cambridge",
+              "Kelley", "Madrid", "Ogden", "Ames Township",
+            ].map(town => (
+              <span key={town} style={{
+                background: town === "Ames" ? "#2d5e2b" : "#f0f7ef",
+                color: town === "Ames" ? "white" : "#2d5e2b",
+                padding: "10px 20px", borderRadius: 999,
+                fontWeight: town === "Ames" ? 700 : 500,
+                fontSize: "0.95rem",
+                border: town === "Ames" ? "none" : "1px solid #c5dfc3",
+              }}>
+                {town}
+              </span>
+            ))}
+          </div>
+          <p style={{ marginTop: 28, color: "#666", fontSize: "0.9rem", lineHeight: 1.6 }}>
+            Not sure if we cover your area? Give us a call at{" "}
+            <a href="tel:5154605650" style={{ color: "#2d5e2b", fontWeight: 600, textDecoration: "none" }}>
+              (515) 460-5650
+            </a>{" "}
+            and we'll be happy to help.
+          </p>
+        </div>
+      </section>
+
       {/* CALCULATOR */}
       <section style={{ padding: "80px 7%" }} id="calculator">
         <div style={{ marginBottom: 40 }}>
