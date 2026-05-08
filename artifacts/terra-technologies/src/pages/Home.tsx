@@ -378,7 +378,7 @@ export default function Home() {
                     id={`deep-${stump.id}`}
                   />
                   <label htmlFor={`deep-${stump.id}`} style={{ cursor: "pointer" }}>
-                    Extra Depth Grinding (10–12") (+20%)
+                    Extra Depth Grinding (15–18") (+20%)
                   </label>
                 </div>
               </div>
