@@ -319,11 +319,11 @@ export default function Home() {
                 <option value="0">Stump Removal (Leave Wood Chips On Property)</option>
                 <option value="0.75">
                   {"Stump Removal + Chip & Debris Removal" +
-                    (discountedTotal > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : "")}
+                    (stumpCount > 0 ? ` (+$${(discountedTotal * 0.75).toFixed(0)})` : "")}
                 </option>
                 <option value="1.05">
                   {"Removal + Debris Removal + Top Soil & Seed Mat" +
-                    (discountedTotal > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : "")}
+                    (stumpCount > 0 ? ` (+$${(discountedTotal * 1.05).toFixed(0)})` : "")}
                 </option>
               </select>
             </div>
@@ -420,12 +420,12 @@ export default function Home() {
           }}>
             <h4 style={{ marginBottom: 20, fontSize: "1.5rem", fontWeight: 700 }}>Estimated Total</h4>
             {[
-              ["Total Stumps", stumpCount.toString()],
-              ["Base Grinding Cost", `$${baseTotal.toFixed(2)}`],
-              ["Discount Applied", `${(discountRate * 100).toFixed(0)}%`],
-              ["Service Package Cost", `$${serviceCost.toFixed(2)}`],
-              ["Sales Tax (7%)", `$${taxAmount.toFixed(2)}`],
-              ["Final Estimated Price", `$${finalTotal.toFixed(2)}`],
+              ["Total Stumps", stumpCount > 0 ? stumpCount.toString() : ""],
+              ["Base Grinding Cost", stumpCount > 0 ? `$${baseTotal.toFixed(2)}` : ""],
+              ["Discount Applied", stumpCount > 0 ? `${(discountRate * 100).toFixed(0)}%` : ""],
+              ["Service Package Cost", stumpCount > 0 ? `$${serviceCost.toFixed(2)}` : ""],
+              ["Sales Tax (7%)", stumpCount > 0 ? `$${taxAmount.toFixed(2)}` : ""],
+              ["Final Estimated Price", stumpCount > 0 ? `$${finalTotal.toFixed(2)}` : ""],
             ].map(([label, value], i, arr) => (
               <div key={label} style={{
                 display: "flex", justifyContent: "space-between",
