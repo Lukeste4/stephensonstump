@@ -3,6 +3,7 @@ import QuoteModal from "@/components/QuoteModal";
 import stephensonLogo from "@/assets/stephenson_logo.png";
 import stumpGrindLeafMulch from "@/assets/stump_grind_leave_mulch.jpg";
 import stumpGrindRemoveMulch from "@/assets/stump_grind_remove_mulch.png";
+import fullLawnRestoration from "@/assets/full_lawn_restoration.png";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -231,7 +232,7 @@ export default function Home() {
             {
               title: "Full Lawn Restoration",
               desc: "Includes debris cleanup, top soil replacement, and grass seed mat installation.",
-              image: null,
+              image: fullLawnRestoration,
             },
           ].map(({ title, desc, image }) => (
             <div key={title} style={{
