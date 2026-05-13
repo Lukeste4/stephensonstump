@@ -6,6 +6,7 @@ import stephensonLogo from "@/assets/stephenson_logo.png";
 import stumpGrindLeafMulch from "@/assets/stump_grind_leave_mulch.jpg";
 import stumpGrindRemoveMulch from "@/assets/stump_grind_remove_mulch.png";
 import fullLawnRestoration from "@/assets/full_lawn_restoration.png";
+import stumpGrinderSilhouette from "@/assets/stump_grinder_silhouette.png";
 
 const PRICE_PER_SQ_IN = 0.37;
 const BASE_SERVICE_FEE = 100;
@@ -283,8 +284,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SILHOUETTE DIVIDER */}
+      <div style={{
+        background: "linear-gradient(to bottom, white 45%, #f5f5f3 45%)",
+        display: "flex",
+        justifyContent: "center",
+        overflow: "hidden",
+        lineHeight: 0,
+      }}>
+        <img
+          src={stumpGrinderSilhouette}
+          alt=""
+          aria-hidden="true"
+          style={{
+            width: "min(640px, 80%)",
+            display: "block",
+            filter: "invert(0.961) brightness(0.97)",
+            userSelect: "none",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
       {/* SERVICES */}
-      <section id="services" style={{ padding: "80px 7% 0", scrollMarginTop: 100 }}>
+      <section id="services" style={{ padding: "40px 7% 0", scrollMarginTop: 100 }}>
         <div style={{ marginBottom: 30 }}>
           <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
             Service Packages
