@@ -302,7 +302,7 @@ export default function Home() {
             width: "min(320px, 40%)",
             display: "block",
             filter: "brightness(0) invert(1) brightness(0.961)",
-            transform: "translateY(-14%)",
+            transform: "translateY(-4%)",
             userSelect: "none",
             pointerEvents: "none",
           }}
