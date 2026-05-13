@@ -99,6 +99,10 @@ export default function Home() {
     document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToFaq = () => {
+    document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh" }}>
 
@@ -156,6 +160,39 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        {/* NAV LINKS — hidden on mobile */}
+        {!isMobile && (
+          <nav style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            {[
+              { label: "Pricing", action: scrollToCalculator },
+              { label: "FAQ", action: scrollToFaq },
+            ].map(({ label, action }) => (
+              <button
+                key={label}
+                onClick={action}
+                style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  color: "#444", fontWeight: 500,
+                  fontSize: scrolled ? "0.9rem" : "0.95rem",
+                  padding: "8px 14px", borderRadius: 8,
+                  transition: "background 0.15s, color 0.15s, font-size 0.3s ease",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = "#f0f0ee";
+                  e.currentTarget.style.color = "#111";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "none";
+                  e.currentTarget.style.color = "#444";
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+        )}
+
         <button
           onClick={() => setPhoneModalOpen(true)}
           style={{
@@ -514,7 +551,9 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <FAQ onCallClick={() => setPhoneModalOpen(true)} />
+      <section id="faq" style={{ scrollMarginTop: 100 }}>
+        <FAQ onCallClick={() => setPhoneModalOpen(true)} />
+      </section>
 
       {/* FOOTER */}
       <footer style={{
