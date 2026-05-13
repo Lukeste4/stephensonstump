@@ -286,18 +286,20 @@ export default function Home() {
 
       {/* SILHOUETTE DIVIDER */}
       <div style={{
-        background: "linear-gradient(to bottom, white 45%, #f5f5f3 45%)",
+        background: "linear-gradient(to bottom, white 74%, #f5f5f3 74%)",
         display: "flex",
         justifyContent: "center",
         overflow: "hidden",
         lineHeight: 0,
+        padding: 0,
+        margin: 0,
       }}>
         <img
           src={stumpGrinderSilhouette}
           alt=""
           aria-hidden="true"
           style={{
-            width: "min(640px, 80%)",
+            width: "min(320px, 40%)",
             display: "block",
             filter: "invert(0.961) brightness(0.97)",
             userSelect: "none",
