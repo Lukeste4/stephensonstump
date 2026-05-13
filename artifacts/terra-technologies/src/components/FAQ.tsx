@@ -190,7 +190,7 @@ export default function FAQ({ onCallClick }: { onCallClick: () => void }) {
   const [activeCategory, setActiveCategory] = useState(0);
 
   return (
-    <section style={{ padding: "0 7% 80px" }}>
+    <section style={{ padding: "0 7% 40px" }}>
       <div style={{ marginBottom: 36 }}>
         <h3
           style={{

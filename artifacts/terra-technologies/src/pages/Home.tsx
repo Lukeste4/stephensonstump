@@ -586,6 +586,31 @@ export default function Home() {
         <FAQ onCallClick={() => setPhoneModalOpen(true)} />
       </section>
 
+      {/* FOOTER SILHOUETTE DIVIDER */}
+      <div style={{
+        background: "linear-gradient(to bottom, #f5f5f3 88%, #111 88%)",
+        display: "flex",
+        justifyContent: "flex-start",
+        paddingLeft: "7%",
+        overflow: "hidden",
+        lineHeight: 0,
+        margin: 0,
+      }}>
+        <img
+          src={stumpGrinderSilhouette}
+          alt=""
+          aria-hidden="true"
+          style={{
+            width: "min(320px, 40%)",
+            display: "block",
+            filter: "brightness(0) invert(1) brightness(0.067)",
+            transform: "translateY(-8%)",
+            userSelect: "none",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
       {/* FOOTER */}
       <footer style={{
         background: "#111", color: "white",
