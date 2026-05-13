@@ -604,7 +604,7 @@ export default function Home() {
             width: "min(320px, 40%)",
             display: "block",
             filter: "brightness(0) invert(1) brightness(0.067)",
-            transform: "translateY(-8%)",
+            transform: "translateY(-7%)",
             userSelect: "none",
             pointerEvents: "none",
           }}
