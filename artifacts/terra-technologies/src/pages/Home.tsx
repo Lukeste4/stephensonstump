@@ -226,7 +226,7 @@ export default function Home() {
         gridTemplateColumns: "1.1fr 1fr",
         gap: 60,
         alignItems: "center",
-        padding: "90px 7%",
+        padding: "90px 7% 40px",
         background: "white",
       }} className="hero-section">
         <div>
