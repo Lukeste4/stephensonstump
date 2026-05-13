@@ -103,6 +103,10 @@ export default function Home() {
     document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToServices = () => {
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh" }}>
 
@@ -165,6 +169,7 @@ export default function Home() {
         {!isMobile && (
           <nav style={{ display: "flex", gap: 4, alignItems: "center" }}>
             {[
+              { label: "Services", action: scrollToServices },
               { label: "Pricing", action: scrollToCalculator },
               { label: "FAQ", action: scrollToFaq },
             ].map(({ label, action }) => (
@@ -279,7 +284,7 @@ export default function Home() {
       </section>
 
       {/* SERVICES */}
-      <section style={{ padding: "80px 7% 0" }}>
+      <section id="services" style={{ padding: "80px 7% 0", scrollMarginTop: 100 }}>
         <div style={{ marginBottom: 30 }}>
           <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
             Service Packages
