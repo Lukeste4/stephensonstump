@@ -286,12 +286,12 @@ export default function Home() {
 
       {/* SILHOUETTE DIVIDER */}
       <div style={{
-        background: "linear-gradient(to bottom, white 74%, #f5f5f3 74%)",
+        background: "linear-gradient(to bottom, white 82%, #f5f5f3 82%)",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-start",
+        paddingLeft: "7%",
         overflow: "hidden",
         lineHeight: 0,
-        padding: 0,
         margin: 0,
       }}>
         <img
@@ -301,7 +301,7 @@ export default function Home() {
           style={{
             width: "min(320px, 40%)",
             display: "block",
-            filter: "invert(0.961) brightness(0.97)",
+            filter: "brightness(0) invert(1) brightness(0.961)",
             userSelect: "none",
             pointerEvents: "none",
           }}
