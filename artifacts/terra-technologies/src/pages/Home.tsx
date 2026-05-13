@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import QuoteModal from "@/components/QuoteModal";
 import PhoneModal from "@/components/PhoneModal";
+import FAQ from "@/components/FAQ";
 import stephensonLogo from "@/assets/stephenson_logo.png";
 import stumpGrindLeafMulch from "@/assets/stump_grind_leave_mulch.jpg";
 import stumpGrindRemoveMulch from "@/assets/stump_grind_remove_mulch.png";
@@ -512,6 +513,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <FAQ onCallClick={() => setPhoneModalOpen(true)} />
+
       {/* FOOTER */}
       <footer style={{
         background: "#111", color: "white",
@@ -566,6 +570,14 @@ export default function Home() {
           }
           .calc-layout {
             grid-template-columns: 1fr !important;
+          }
+          .faq-layout {
+            grid-template-columns: 1fr !important;
+          }
+          .faq-tabs {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            position: static !important;
           }
         }
       `}</style>
