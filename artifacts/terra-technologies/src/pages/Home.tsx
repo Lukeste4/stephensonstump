@@ -338,7 +338,7 @@ export default function Home() {
               onMouseEnter={e => (e.currentTarget.style.background = "#2b2b2b")}
               onMouseLeave={e => (e.currentTarget.style.background = "#111")}
             >
-              Calculate Pricing
+              Get Instant Estimate
             </button>
           </div>
         </div>
