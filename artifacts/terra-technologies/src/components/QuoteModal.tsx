@@ -281,10 +281,13 @@ export default function QuoteModal({
     >
       <div style={{
         background: "white", borderRadius: 28,
-        padding: "32px 36px", width: "100%", maxWidth: 560,
-        maxHeight: "90vh", overflowY: "auto",
+        width: "100%", maxWidth: 560,
+        maxHeight: "90vh",
+        overflow: "hidden",
         boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
+        display: "flex", flexDirection: "column",
       }}>
+      <div style={{ overflowY: "auto", padding: "32px 36px", flex: 1 }}>
         {submitted ? (
           <div style={{ textAlign: "center", padding: "12px 0" }}>
             <div style={{
@@ -433,6 +436,7 @@ export default function QuoteModal({
             </form>
           </>
         )}
+      </div>
       </div>
     </div>
   );
