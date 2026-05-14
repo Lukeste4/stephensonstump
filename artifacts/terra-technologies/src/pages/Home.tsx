@@ -325,7 +325,7 @@ export default function Home() {
             Modern Stump Grinding Services
           </h1>
           <p style={{ color: "#555", lineHeight: 1.7, maxWidth: 620, fontSize: "1.05rem" }}>
-            Stephenson Stump Grinding provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages. Typical grind depth is 4–6 inches below grade.
+            Stephenson Stump Grinding provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages.
           </p>
           <div style={{ marginTop: 34 }}>
             <button
