@@ -238,9 +238,9 @@ export default function Home() {
           }}>
             Fast • Clean • Professional
           </div>
-          <h2 style={{ fontSize: "4rem", lineHeight: 1, letterSpacing: "-3px", marginBottom: 24, fontWeight: 700 }}>
+          <h1 style={{ fontSize: "4rem", lineHeight: 1, letterSpacing: "-3px", marginBottom: 24, fontWeight: 700 }}>
             Modern Stump Grinding Services
-          </h2>
+          </h1>
           <p style={{ color: "#555", lineHeight: 1.7, maxWidth: 620, fontSize: "1.05rem" }}>
             Stephenson Stump Grinding provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages. Typical grind depth is 4–6 inches below grade.
           </p>
@@ -312,9 +312,9 @@ export default function Home() {
       {/* SERVICES */}
       <section id="services" style={{ padding: "40px 7% 0", scrollMarginTop: 100 }}>
         <div style={{ marginBottom: 30 }}>
-          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
+          <h2 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
             Service Packages
-          </h3>
+          </h2>
           <p style={{ color: "#666" }}>Flexible cleanup and restoration options available.</p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
@@ -358,9 +358,9 @@ export default function Home() {
       {/* CALCULATOR */}
       <section style={{ padding: "80px 7%" }} id="calculator">
         <div style={{ marginBottom: 40 }}>
-          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
+          <h2 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
             Instant Price Calculator
-          </h3>
+          </h2>
           <p style={{ color: "#666" }}>Enter stump diameters below to estimate your project cost.</p>
         </div>
 
@@ -537,9 +537,9 @@ export default function Home() {
       {/* SERVICE AREA */}
       <section style={{ padding: "0 7% 80px" }}>
         <div style={{ marginBottom: 36 }}>
-          <h3 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
+          <h2 style={{ fontSize: "2.5rem", letterSpacing: "-2px", marginBottom: 12, fontWeight: 700 }}>
             Service Area
-          </h3>
+          </h2>
           <p style={{ color: "#666" }}>Proudly serving Ames and the surrounding Story County communities.</p>
         </div>
         <div style={{
