@@ -1,0 +1,13 @@
+name = "stephenson-stump-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "stephenson-stump-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+FROM_EMAIL = "Stephenson Stump Grinding <onboarding@resend.dev>"
+ALLOWED_ORIGIN = "https://stephensonstumpgrinding.com"
