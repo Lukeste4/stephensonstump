@@ -414,61 +414,66 @@ export default function Home() {
               <span style={{ color: "#888", fontSize: "0.9rem" }}>· Google Reviews</span>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {/* Arrow buttons */}
-            {(["left", "right"] as const).map(dir => (
-              <button
-                key={dir}
-                onClick={() => {
-                  const el = document.getElementById("reviews-track");
-                  if (el) el.scrollBy({ left: dir === "left" ? -340 : 340, behavior: "smooth" });
-                }}
-                style={{
-                  width: 40, height: 40, borderRadius: "50%",
-                  border: "1px solid #d0d0cc", background: "white",
-                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#f0f0ee"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "white"; }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  {dir === "left"
-                    ? <path d="M15 18l-6-6 6-6"/>
-                    : <path d="M9 18l6-6-6-6"/>}
-                </svg>
-              </button>
-            ))}
-            <a
-              href="https://www.google.com/search?q=Stephenson+Stump+Grinding"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "flex", alignItems: "center", gap: 6,
-                color: "#2d5e2b", fontWeight: 600, fontSize: "0.9rem",
-                textDecoration: "none", border: "1px solid #c5dfc3",
-                background: "white", padding: "8px 16px", borderRadius: 999,
-              }}
-            >
-              View all reviews
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
+          <a
+            href="https://www.google.com/search?q=Stephenson+Stump+Grinding"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              color: "#2d5e2b", fontWeight: 600, fontSize: "0.9rem",
+              textDecoration: "none", border: "1px solid #c5dfc3",
+              background: "white", padding: "8px 16px", borderRadius: 999,
+            }}
+          >
+            View all reviews
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
 
-        {/* Scrollable track */}
-        <div
-          id="reviews-track"
-          style={{
-            display: "flex", gap: 16,
-            overflowX: "auto", paddingBottom: 8,
-            paddingLeft: "7%", paddingRight: "7%",
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch",
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-          }}
-        >
+        {/* Carousel wrapper — narrower, arrows float on edges */}
+        <div style={{ position: "relative", margin: "0 auto", maxWidth: "86%", padding: "0 40px" }}>
+
+          {/* Floating arrows */}
+          {(["left", "right"] as const).map(dir => (
+            <button
+              key={dir}
+              onClick={() => {
+                const el = document.getElementById("reviews-track");
+                if (el) el.scrollBy({ left: dir === "left" ? -340 : 340, behavior: "smooth" });
+              }}
+              style={{
+                position: "absolute",
+                top: "50%", transform: "translateY(-50%)",
+                [dir]: -4,
+                width: 40, height: 40, borderRadius: "50%",
+                border: "1px solid #d0d0cc",
+                background: "white",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
+                cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                zIndex: 2,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#f0f0ee"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "white"; }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                {dir === "left" ? <path d="M15 18l-6-6 6-6"/> : <path d="M9 18l6-6-6-6"/>}
+              </svg>
+            </button>
+          ))}
+
+          {/* Scrollable track */}
+          <div
+            id="reviews-track"
+            style={{
+              display: "flex", gap: 16,
+              overflowX: "auto", paddingBottom: 8,
+              scrollSnapType: "x mandatory",
+              WebkitOverflowScrolling: "touch",
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
+            }}
+          >
           {[
             {
               name: "Sarah M.",
@@ -557,6 +562,7 @@ export default function Home() {
               </p>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
