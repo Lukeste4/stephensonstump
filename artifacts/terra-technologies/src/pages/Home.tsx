@@ -725,10 +725,21 @@ export default function Home() {
       <QuoteModal
         isOpen={quoteModalOpen}
         onClose={() => setQuoteModalOpen(false)}
+        stumps={stumps}
         stumpCount={stumpCount}
         servicePackage={servicePackage}
         servicePackageLabel=""
         estimatedTotal={finalTotal}
+        priceBreakdown={{
+          baseServiceFee: BASE_SERVICE_FEE,
+          stumpGrindingCost: stumpAreaTotal,
+          discountRate,
+          discountAmount,
+          serviceCost,
+          taxAmount,
+          subtotal,
+          finalTotal,
+        }}
       />
 
       <PhoneModal

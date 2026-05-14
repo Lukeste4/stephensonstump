@@ -1,27 +1,79 @@
 import { useState } from "react";
 import { useCreateQuote } from "@workspace/api-client-react";
 
+interface Stump {
+  id: number;
+  diameter: string;
+  deep: boolean;
+}
+
+interface PriceBreakdown {
+  baseServiceFee: number;
+  stumpGrindingCost: number;
+  discountRate: number;
+  discountAmount: number;
+  serviceCost: number;
+  taxAmount: number;
+  subtotal: number;
+  finalTotal: number;
+}
+
 interface QuoteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  stumps: Stump[];
   stumpCount: number;
   servicePackage: string;
   servicePackageLabel: string;
   estimatedTotal: number;
+  priceBreakdown: PriceBreakdown;
 }
 
 const SERVICE_LABEL_MAP: Record<string, string> = {
-  "0": "Stump Removal (Leave Wood Chips On Property)",
-  "0.75": "Stump Removal + Chip & Debris Removal",
-  "1.05": "Removal + Debris Removal + Top Soil & Seed Mat",
+  "0": "Standard – Leave Wood Chips",
+  "0.75": "Cleanup – Chip & Debris Removal",
+  "1.05": "Full Restoration – Topsoil & Seed Mat",
 };
+
+function buildNoteSummary(stumps: Stump[], servicePackage: string, pb: PriceBreakdown, userNotes: string): string {
+  const validStumps = stumps.filter(s => parseFloat(s.diameter) > 0);
+  const stumpLines = validStumps.map((s, i) =>
+    `  Stump ${i + 1}: ${s.diameter}" diameter${s.deep ? " (Extra Depth)" : ""}`
+  ).join("\n");
+
+  const discountLine = pb.discountRate > 0
+    ? `Multi-stump discount (${Math.round(pb.discountRate * 100)}%): -$${pb.discountAmount.toFixed(2)}\n`
+    : "";
+
+  const servicePackageLine = pb.serviceCost > 0
+    ? `Service package add-on: +$${pb.serviceCost.toFixed(2)}\n`
+    : "";
+
+  const summary =
+    `=== QUOTE DETAILS ===\n` +
+    `Stumps (${validStumps.length}):\n${stumpLines}\n\n` +
+    `Service Package: ${SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}\n\n` +
+    `--- Price Breakdown ---\n` +
+    `Base service fee: $${pb.baseServiceFee.toFixed(2)}\n` +
+    `Stump grinding: $${pb.stumpGrindingCost.toFixed(2)}\n` +
+    discountLine +
+    servicePackageLine +
+    `Subtotal: $${pb.subtotal.toFixed(2)}\n` +
+    `Tax (7%): $${pb.taxAmount.toFixed(2)}\n` +
+    `TOTAL ESTIMATE: $${pb.finalTotal.toFixed(2)}\n` +
+    (userNotes ? `\n--- Customer Notes ---\n${userNotes}` : "");
+
+  return summary;
+}
 
 export default function QuoteModal({
   isOpen,
   onClose,
+  stumps = [],
   stumpCount,
   servicePackage,
   estimatedTotal,
+  priceBreakdown: pb,
 }: QuoteModalProps) {
   const [form, setForm] = useState({
     name: "",
@@ -32,8 +84,11 @@ export default function QuoteModal({
   });
   const [errors, setErrors] = useState<Partial<typeof form>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [showStumpDetails, setShowStumpDetails] = useState(false);
 
   const mutation = useCreateQuote();
+
+  const validStumps = stumps.filter(s => parseFloat(s.diameter) > 0);
 
   const validate = () => {
     const errs: Partial<typeof form> = {};
@@ -60,7 +115,7 @@ export default function QuoteModal({
           phone: form.phone.trim(),
           email: form.email.trim(),
           address: form.address.trim(),
-          notes: form.notes.trim(),
+          notes: buildNoteSummary(stumps, servicePackage, pb, form.notes.trim()),
           stumpCount,
           servicePackage: SERVICE_LABEL_MAP[servicePackage] ?? servicePackage,
           estimatedTotal,
@@ -76,6 +131,7 @@ export default function QuoteModal({
     setForm({ name: "", phone: "", email: "", address: "", notes: "" });
     setErrors({});
     setSubmitted(false);
+    setShowStumpDetails(false);
     mutation.reset();
     onClose();
   };
@@ -108,6 +164,111 @@ export default function QuoteModal({
     marginTop: 4,
   };
 
+  const rowStyle: React.CSSProperties = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "6px 0",
+    fontSize: "0.88rem",
+  };
+
+  const PriceBreakdownTable = () => (
+    <div style={{
+      background: "#f5f5f3", borderRadius: 14,
+      padding: "16px 18px", marginBottom: 20,
+    }}>
+      <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        Price Breakdown
+      </div>
+
+      {/* Stump list toggle */}
+      <div style={{ marginBottom: 8 }}>
+        <button
+          type="button"
+          onClick={() => setShowStumpDetails(v => !v)}
+          style={{
+            background: "none", border: "none", padding: 0, cursor: "pointer",
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span style={{ fontSize: "0.88rem", color: "#555" }}>
+              {stumpCount} stump{stumpCount !== 1 ? "s" : ""}
+              {validStumps.some(s => s.deep) && (
+                <span style={{ color: "#2d5e2b", fontSize: "0.78rem", marginLeft: 6 }}>
+                  · {validStumps.filter(s => s.deep).length} extra deep
+                </span>
+              )}
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>${pb.stumpGrindingCost.toFixed(2)}</span>
+            <span style={{ color: "#999", fontSize: "0.75rem" }}>{showStumpDetails ? "▲" : "▼"}</span>
+          </div>
+        </button>
+
+        {showStumpDetails && (
+          <div style={{
+            marginTop: 8, paddingLeft: 8, borderLeft: "2px solid #e0e0e0",
+          }}>
+            {validStumps.map((s, i) => (
+              <div key={s.id} style={{ ...rowStyle, color: "#555", paddingTop: 3, paddingBottom: 3 }}>
+                <span>Stump {i + 1} — {s.diameter}" dia.{s.deep ? " + extra depth" : ""}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div style={{ ...rowStyle, color: "#555" }}>
+        <span>Base service fee</span>
+        <span>${pb.baseServiceFee.toFixed(2)}</span>
+      </div>
+
+      {pb.discountRate > 0 && (
+        <div style={{ ...rowStyle, color: "#2d5e2b" }}>
+          <span>Multi-stump discount ({Math.round(pb.discountRate * 100)}%)</span>
+          <span>−${pb.discountAmount.toFixed(2)}</span>
+        </div>
+      )}
+
+      {pb.serviceCost > 0 && (
+        <div style={{ ...rowStyle, color: "#555" }}>
+          <span>{SERVICE_LABEL_MAP[servicePackage] ? "Service package add-on" : "Service package"}</span>
+          <span>+${pb.serviceCost.toFixed(2)}</span>
+        </div>
+      )}
+
+      <div style={{ borderTop: "1px solid #ddd", margin: "8px 0" }} />
+
+      <div style={{ ...rowStyle, color: "#555" }}>
+        <span>Subtotal</span>
+        <span>${pb.subtotal.toFixed(2)}</span>
+      </div>
+      <div style={{ ...rowStyle, color: "#555" }}>
+        <span>Tax (7%)</span>
+        <span>${pb.taxAmount.toFixed(2)}</span>
+      </div>
+
+      <div style={{ borderTop: "2px solid #ccc", margin: "8px 0" }} />
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Estimated Total</span>
+        <span style={{ fontWeight: 700, fontSize: "1.15rem", color: "#2d5e2b" }}>${pb.finalTotal.toFixed(2)}</span>
+      </div>
+
+      <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid #e4e4e4" }}>
+        <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          Service Package
+        </div>
+        <div style={{ fontSize: "0.85rem", color: "#333", fontWeight: 500 }}>
+          {SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -120,12 +281,12 @@ export default function QuoteModal({
     >
       <div style={{
         background: "white", borderRadius: 28,
-        padding: 40, width: "100%", maxWidth: 560,
+        padding: "32px 36px", width: "100%", maxWidth: 560,
         maxHeight: "90vh", overflowY: "auto",
         boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
       }}>
         {submitted ? (
-          <div style={{ textAlign: "center", padding: "20px 0" }}>
+          <div style={{ textAlign: "center", padding: "12px 0" }}>
             <div style={{
               width: 64, height: 64, borderRadius: "50%",
               background: "#e9f7e6", display: "flex",
@@ -135,29 +296,14 @@ export default function QuoteModal({
             <h3 style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 12 }}>
               Quote Submitted!
             </h3>
-            <p style={{ color: "#555", lineHeight: 1.6, marginBottom: 28 }}>
+            <p style={{ color: "#555", lineHeight: 1.6, marginBottom: 24 }}>
               Thanks, {form.name.split(" ")[0]}! We've received your quote request and will be in touch shortly.
             </p>
-            <div style={{
-              background: "#f5f5f3", borderRadius: 16, padding: 20,
-              marginBottom: 28, textAlign: "left",
-            }}>
-              <div style={{ fontSize: "0.85rem", color: "#666", marginBottom: 8 }}>Quote Summary</div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ color: "#555" }}>Stumps</span>
-                <strong>{stumpCount}</strong>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ color: "#555" }}>Package</span>
-                <strong style={{ textAlign: "right", maxWidth: "60%", fontSize: "0.9rem" }}>
-                  {SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}
-                </strong>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "#555" }}>Estimate</span>
-                <strong style={{ color: "#2d5e2b" }}>${estimatedTotal.toFixed(2)}</strong>
-              </div>
+
+            <div style={{ textAlign: "left" }}>
+              <PriceBreakdownTable />
             </div>
+
             <button
               onClick={handleClose}
               style={{
@@ -171,11 +317,11 @@ export default function QuoteModal({
           </div>
         ) : (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div>
                 <h3 style={{ fontSize: "1.6rem", fontWeight: 700, letterSpacing: "-0.5px" }}>Request a Quote</h3>
                 <p style={{ color: "#666", marginTop: 6, fontSize: "0.9rem" }}>
-                  We'll follow up to confirm your appointment.
+                  Review your estimate and fill in your details.
                 </p>
               </div>
               <button
@@ -191,26 +337,7 @@ export default function QuoteModal({
               </button>
             </div>
 
-            {/* Quote summary strip */}
-            <div style={{
-              background: "#111", color: "white", borderRadius: 16,
-              padding: "16px 20px", marginBottom: 24,
-              display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
-              flexWrap: "wrap",
-            }}>
-              <div>
-                <div style={{ fontSize: "0.78rem", color: "#999", marginBottom: 2 }}>Stumps</div>
-                <strong>{stumpCount}</strong>
-              </div>
-              <div style={{ flex: 1, minWidth: 140 }}>
-                <div style={{ fontSize: "0.78rem", color: "#999", marginBottom: 2 }}>Package</div>
-                <strong style={{ fontSize: "0.85rem" }}>{SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}</strong>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: "0.78rem", color: "#999", marginBottom: 2 }}>Estimate</div>
-                <strong style={{ color: "#7cc76f", fontSize: "1.1rem" }}>${estimatedTotal.toFixed(2)}</strong>
-              </div>
-            </div>
+            <PriceBreakdownTable />
 
             <form onSubmit={handleSubmit} noValidate>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
