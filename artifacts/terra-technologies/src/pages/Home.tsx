@@ -169,7 +169,7 @@ export default function Home() {
                 color: "#666",
                 fontSize: scrolled ? "0.8rem" : "1.33rem",
                 transition: "font-size 0.3s ease",
-              }}>Professional Stump Grinding</div>
+              }}>Serving Central Iowa</div>
             )}
           </div>
         </div>
