@@ -337,8 +337,6 @@ export default function QuoteModal({
               </button>
             </div>
 
-            <PriceBreakdownTable />
-
             <form onSubmit={handleSubmit} noValidate>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
                 <div>
@@ -389,7 +387,7 @@ export default function QuoteModal({
                 {errors.address && <div style={errorStyle}>{errors.address}</div>}
               </div>
 
-              <div style={{ marginBottom: 24 }}>
+              <div style={{ marginBottom: 20 }}>
                 <label style={labelStyle}>Additional Notes (optional)</label>
                 <textarea
                   value={form.notes}
@@ -403,6 +401,8 @@ export default function QuoteModal({
                   }}
                 />
               </div>
+
+              <PriceBreakdownTable />
 
               {mutation.isError && (
                 <div style={{
