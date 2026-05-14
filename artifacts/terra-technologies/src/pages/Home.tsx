@@ -648,7 +648,7 @@ export default function Home() {
             ))}
           </div>
           <p style={{ marginTop: 28, color: "#666", fontSize: "0.9rem", lineHeight: 1.6 }}>
-            Not sure if we cover your area? Give us a call or text at{" "}
+            Not sure if we cover your area?{" "}
             <button
               onClick={() => setPhoneModalOpen(true)}
               style={{
@@ -657,7 +657,7 @@ export default function Home() {
                 fontSize: "inherit", textDecoration: "underline",
               }}
             >
-              (515) 329-5923
+              Give us a call or text
             </button>{" "}
             and we'll be happy to help.
           </p>
