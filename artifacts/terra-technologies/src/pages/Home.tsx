@@ -37,16 +37,20 @@ export default function Home() {
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [phoneModalOpen, setPhoneModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10);
+      setMobileMenuOpen(false);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 640);
+    const onResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -113,7 +117,7 @@ export default function Home() {
 
       {/* HEADER SPACER — prevents content from hiding under fixed header */}
       <div style={{
-        height: isMobile ? 68 : scrolled ? 80 : 170,
+        height: isMobile ? 64 : scrolled ? 80 : 170,
         transition: "height 0.3s ease",
         flexShrink: 0,
       }} />
@@ -130,31 +134,35 @@ export default function Home() {
         top: 0,
         left: 0,
         right: 0,
-        height: isMobile ? 68 : scrolled ? 80 : 170,
+        height: isMobile ? 64 : scrolled ? 80 : 170,
         zIndex: 100,
         transition: "height 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
         boxShadow: (scrolled || isMobile) ? "0 2px 16px rgba(0,0,0,0.07)" : "none",
-        overflow: "hidden",
+        overflow: "visible",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 10 }}>
+        {/* LOGO + BRAND */}
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 10, minWidth: 0 }}>
           <img
             src={stephensonLogo}
             alt="Stephenson Stump Grinding"
             style={{
-              height: isMobile ? 46 : scrolled ? 52 : 110,
-              width: isMobile ? 46 : scrolled ? 52 : 110,
+              height: isMobile ? 42 : scrolled ? 52 : 110,
+              width: isMobile ? 42 : scrolled ? 52 : 110,
               objectFit: "contain",
               transition: "height 0.3s ease, width 0.3s ease",
               flexShrink: 0,
             }}
           />
-          <div>
+          <div style={{ minWidth: 0 }}>
             <div style={{
-              fontSize: isMobile ? "0.95rem" : scrolled ? "1.1rem" : "1.96rem",
+              fontSize: isMobile ? "0.9rem" : scrolled ? "1.1rem" : "1.96rem",
               fontWeight: 600,
               letterSpacing: "-0.3px",
               lineHeight: 1.2,
               transition: "font-size 0.3s ease",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}>Stephenson Stump Grinding</div>
             {!isMobile && (
               <div style={{
@@ -166,7 +174,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* NAV LINKS — hidden on mobile */}
+        {/* NAV LINKS — desktop only */}
         {!isMobile && (
           <nav style={{ display: "flex", gap: 4, alignItems: "center" }}>
             {[
@@ -199,25 +207,100 @@ export default function Home() {
           </nav>
         )}
 
-        <button
-          onClick={() => setPhoneModalOpen(true)}
-          style={{
-            display: "flex", alignItems: "center", gap: 6,
-            background: "#2d5e2b", color: "white",
-            padding: isMobile ? "9px 14px" : scrolled ? "10px 18px" : "13px 22px",
-            borderRadius: 999, fontWeight: 600, border: "none",
-            fontSize: isMobile ? "0.85rem" : scrolled ? "0.9rem" : "1rem",
-            transition: "background 0.2s, padding 0.3s ease, font-size 0.3s ease",
-            whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.background = "#234122")}
-          onMouseLeave={e => (e.currentTarget.style.background = "#2d5e2b")}
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
-          </svg>
-          {isMobile ? "Call Us" : "(515) 329-5923"}
-        </button>
+        {/* RIGHT SIDE: Call button + hamburger (mobile) */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <button
+            onClick={() => setPhoneModalOpen(true)}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              background: "#2d5e2b", color: "white",
+              padding: isMobile ? "8px 13px" : scrolled ? "10px 18px" : "13px 22px",
+              borderRadius: 999, fontWeight: 600, border: "none",
+              fontSize: isMobile ? "0.82rem" : scrolled ? "0.9rem" : "1rem",
+              transition: "background 0.2s, padding 0.3s ease, font-size 0.3s ease",
+              whiteSpace: "nowrap", cursor: "pointer",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = "#234122")}
+            onMouseLeave={e => (e.currentTarget.style.background = "#2d5e2b")}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.59.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
+            </svg>
+            {isMobile ? "Call Us" : "(515) 329-5923"}
+          </button>
+
+          {/* HAMBURGER BUTTON — mobile only */}
+          {isMobile && (
+            <button
+              onClick={() => setMobileMenuOpen(o => !o)}
+              aria-label="Toggle menu"
+              style={{
+                display: "flex", flexDirection: "column", justifyContent: "center",
+                alignItems: "center", gap: 5,
+                background: "none", border: "1px solid #e0e0e0",
+                borderRadius: 8, padding: "8px 10px", cursor: "pointer",
+                width: 40, height: 40,
+              }}
+            >
+              <span style={{
+                display: "block", width: 18, height: 2,
+                background: "#333", borderRadius: 2,
+                transform: mobileMenuOpen ? "translateY(7px) rotate(45deg)" : "none",
+                transition: "transform 0.2s ease",
+              }} />
+              <span style={{
+                display: "block", width: 18, height: 2,
+                background: "#333", borderRadius: 2,
+                opacity: mobileMenuOpen ? 0 : 1,
+                transition: "opacity 0.2s ease",
+              }} />
+              <span style={{
+                display: "block", width: 18, height: 2,
+                background: "#333", borderRadius: 2,
+                transform: mobileMenuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
+                transition: "transform 0.2s ease",
+              }} />
+            </button>
+          )}
+        </div>
+
+        {/* MOBILE DROPDOWN MENU */}
+        {isMobile && (
+          <div style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            background: "white",
+            borderBottom: "1px solid #e8e8e8",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            maxHeight: mobileMenuOpen ? 200 : 0,
+            transition: "max-height 0.3s ease",
+            zIndex: 99,
+          }}>
+            {[
+              { label: "Services", action: scrollToServices },
+              { label: "Pricing", action: scrollToCalculator },
+              { label: "FAQ", action: scrollToFaq },
+            ].map(({ label, action }) => (
+              <button
+                key={label}
+                onClick={() => { action(); setMobileMenuOpen(false); }}
+                style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  color: "#222", fontWeight: 500, fontSize: "1rem",
+                  padding: "14px 5%", textAlign: "left",
+                  borderBottom: "1px solid #f0f0f0",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
       </header>
 
       {/* HERO */}
