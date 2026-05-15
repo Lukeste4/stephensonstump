@@ -113,7 +113,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh", paddingBottom: isMobile ? 80 : 0 }}>
 
       {/* HEADER SPACER — prevents content from hiding under fixed header */}
       <div style={{
@@ -922,6 +922,31 @@ export default function Home() {
         isOpen={phoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
       />
+
+      {/* Sticky bottom CTA — mobile only */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          zIndex: 100,
+          background: "white",
+          borderTop: "1px solid #e5e5e3",
+          padding: "12px 20px",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.08)",
+        }}>
+          <button
+            onClick={scrollToCalculator}
+            style={{
+              width: "100%", border: "none",
+              background: "#111", color: "white",
+              padding: "16px 24px", borderRadius: 14,
+              fontWeight: 600, fontSize: "1rem",
+              cursor: "pointer",
+            }}
+          >
+            Get Instant Estimate
+          </button>
+        </div>
+      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
