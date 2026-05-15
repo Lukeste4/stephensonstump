@@ -303,10 +303,6 @@ export default function QuoteModal({
               Thanks, {form.name.split(" ")[0]}! We've received your quote request and will be in touch shortly.
             </p>
 
-            <div style={{ textAlign: "left" }}>
-              <PriceBreakdownTable />
-            </div>
-
             <button
               onClick={handleClose}
               style={{
