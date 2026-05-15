@@ -84,7 +84,7 @@ export default function QuoteModal({
   });
   const [errors, setErrors] = useState<Partial<typeof form>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [showStumpDetails, setShowStumpDetails] = useState(false);
+  const [showPriceBreakdown, setShowPriceBreakdown] = useState(false);
   const [photos, setPhotos] = useState<{ dataUrl: string; name: string }[]>([]);
   const [photoError, setPhotoError] = useState<string>("");
 
@@ -160,7 +160,7 @@ export default function QuoteModal({
     setForm({ name: "", phone: "", email: "", address: "", notes: "" });
     setErrors({});
     setSubmitted(false);
-    setShowStumpDetails(false);
+    setShowPriceBreakdown(false);
     setPhotos([]);
     setPhotoError("");
     mutation.reset();
@@ -206,97 +206,105 @@ export default function QuoteModal({
   const PriceBreakdownTable = () => (
     <div style={{
       background: "#f5f5f3", borderRadius: 14,
-      padding: "16px 18px", marginBottom: 20,
+      marginBottom: 20, overflow: "hidden",
     }}>
-      <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-        Price Breakdown
-      </div>
+      {/* Collapsible header — always visible */}
+      <button
+        type="button"
+        onClick={() => setShowPriceBreakdown(v => !v)}
+        style={{
+          background: "none", border: "none", cursor: "pointer",
+          width: "100%", padding: "14px 18px",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Price Breakdown
+          </span>
+          <span style={{ fontSize: "0.78rem", color: "#aaa" }}>
+            {showPriceBreakdown ? "▲" : "▼"}
+          </span>
+        </div>
+        <span style={{ fontWeight: 700, fontSize: "1rem", color: "#2d5e2b" }}>
+          ${pb.finalTotal.toFixed(2)}
+        </span>
+      </button>
 
-      {/* Stump list toggle */}
-      <div style={{ marginBottom: 8 }}>
-        <button
-          type="button"
-          onClick={() => setShowStumpDetails(v => !v)}
-          style={{
-            background: "none", border: "none", padding: 0, cursor: "pointer",
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <span style={{ fontSize: "0.88rem", color: "#555" }}>
-              {stumpCount} stump{stumpCount !== 1 ? "s" : ""}
-              {validStumps.some(s => s.deep) && (
-                <span style={{ color: "#2d5e2b", fontSize: "0.78rem", marginLeft: 6 }}>
-                  · {validStumps.filter(s => s.deep).length} extra deep
-                </span>
-              )}
-            </span>
+      {/* Expandable detail */}
+      {showPriceBreakdown && (
+        <div style={{ padding: "0 18px 16px" }}>
+          <div style={{ borderTop: "1px solid #e0e0e0", marginBottom: 12 }} />
+
+          {/* Stump list — always shown when expanded */}
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ ...rowStyle, color: "#555" }}>
+              <span>
+                {stumpCount} stump{stumpCount !== 1 ? "s" : ""}
+                {validStumps.some(s => s.deep) && (
+                  <span style={{ color: "#2d5e2b", fontSize: "0.78rem", marginLeft: 6 }}>
+                    · {validStumps.filter(s => s.deep).length} extra deep
+                  </span>
+                )}
+              </span>
+              <span>${pb.stumpGrindingCost.toFixed(2)}</span>
+            </div>
+            <div style={{ paddingLeft: 8, borderLeft: "2px solid #e0e0e0", marginTop: 4 }}>
+              {validStumps.map((s, i) => (
+                <div key={s.id} style={{ ...rowStyle, color: "#777", paddingTop: 2, paddingBottom: 2, fontSize: "0.83rem" }}>
+                  <span>Stump {i + 1} — {s.diameter}" dia.{s.deep ? " + extra depth" : ""}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>${pb.stumpGrindingCost.toFixed(2)}</span>
-            <span style={{ color: "#999", fontSize: "0.75rem" }}>{showStumpDetails ? "▲" : "▼"}</span>
+
+          <div style={{ ...rowStyle, color: "#555" }}>
+            <span>Base service fee</span>
+            <span>${pb.baseServiceFee.toFixed(2)}</span>
           </div>
-        </button>
 
-        {showStumpDetails && (
-          <div style={{
-            marginTop: 8, paddingLeft: 8, borderLeft: "2px solid #e0e0e0",
-          }}>
-            {validStumps.map((s, i) => (
-              <div key={s.id} style={{ ...rowStyle, color: "#555", paddingTop: 3, paddingBottom: 3 }}>
-                <span>Stump {i + 1} — {s.diameter}" dia.{s.deep ? " + extra depth" : ""}</span>
-              </div>
-            ))}
+          {pb.discountRate > 0 && (
+            <div style={{ ...rowStyle, color: "#2d5e2b" }}>
+              <span>Multi-stump discount ({Math.round(pb.discountRate * 100)}%)</span>
+              <span>−${pb.discountAmount.toFixed(2)}</span>
+            </div>
+          )}
+
+          {pb.serviceCost > 0 && (
+            <div style={{ ...rowStyle, color: "#555" }}>
+              <span>{SERVICE_LABEL_MAP[servicePackage] ? "Service package add-on" : "Service package"}</span>
+              <span>+${pb.serviceCost.toFixed(2)}</span>
+            </div>
+          )}
+
+          <div style={{ borderTop: "1px solid #ddd", margin: "8px 0" }} />
+
+          <div style={{ ...rowStyle, color: "#555" }}>
+            <span>Subtotal</span>
+            <span>${pb.subtotal.toFixed(2)}</span>
           </div>
-        )}
-      </div>
+          <div style={{ ...rowStyle, color: "#555" }}>
+            <span>Tax (7%)</span>
+            <span>${pb.taxAmount.toFixed(2)}</span>
+          </div>
 
-      <div style={{ ...rowStyle, color: "#555" }}>
-        <span>Base service fee</span>
-        <span>${pb.baseServiceFee.toFixed(2)}</span>
-      </div>
+          <div style={{ borderTop: "2px solid #ccc", margin: "8px 0" }} />
 
-      {pb.discountRate > 0 && (
-        <div style={{ ...rowStyle, color: "#2d5e2b" }}>
-          <span>Multi-stump discount ({Math.round(pb.discountRate * 100)}%)</span>
-          <span>−${pb.discountAmount.toFixed(2)}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Estimated Total</span>
+            <span style={{ fontWeight: 700, fontSize: "1.15rem", color: "#2d5e2b" }}>${pb.finalTotal.toFixed(2)}</span>
+          </div>
+
+          <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid #e4e4e4" }}>
+            <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              Service Package
+            </div>
+            <div style={{ fontSize: "0.85rem", color: "#333", fontWeight: 500 }}>
+              {SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}
+            </div>
+          </div>
         </div>
       )}
-
-      {pb.serviceCost > 0 && (
-        <div style={{ ...rowStyle, color: "#555" }}>
-          <span>{SERVICE_LABEL_MAP[servicePackage] ? "Service package add-on" : "Service package"}</span>
-          <span>+${pb.serviceCost.toFixed(2)}</span>
-        </div>
-      )}
-
-      <div style={{ borderTop: "1px solid #ddd", margin: "8px 0" }} />
-
-      <div style={{ ...rowStyle, color: "#555" }}>
-        <span>Subtotal</span>
-        <span>${pb.subtotal.toFixed(2)}</span>
-      </div>
-      <div style={{ ...rowStyle, color: "#555" }}>
-        <span>Tax (7%)</span>
-        <span>${pb.taxAmount.toFixed(2)}</span>
-      </div>
-
-      <div style={{ borderTop: "2px solid #ccc", margin: "8px 0" }} />
-
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Estimated Total</span>
-        <span style={{ fontWeight: 700, fontSize: "1.15rem", color: "#2d5e2b" }}>${pb.finalTotal.toFixed(2)}</span>
-      </div>
-
-      <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid #e4e4e4" }}>
-        <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#888", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-          Service Package
-        </div>
-        <div style={{ fontSize: "0.85rem", color: "#333", fontWeight: 500 }}>
-          {SERVICE_LABEL_MAP[servicePackage] ?? servicePackage}
-        </div>
-      </div>
     </div>
   );
 
