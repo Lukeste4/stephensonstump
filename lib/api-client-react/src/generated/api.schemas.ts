@@ -15,6 +15,7 @@ export interface CreateQuoteBody {
   email: string;
   address: string;
   notes?: string;
+  photos?: string[];
   stumpCount: number;
   servicePackage: string;
   estimatedTotal: number;

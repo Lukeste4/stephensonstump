@@ -24,6 +24,7 @@ export const CreateQuoteBody = zod.object({
   email: zod.string(),
   address: zod.string(),
   notes: zod.string().optional(),
+  photos: zod.array(zod.string()).optional(),
   stumpCount: zod.number(),
   servicePackage: zod.string(),
   estimatedTotal: zod.number(),

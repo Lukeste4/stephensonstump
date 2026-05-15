@@ -85,6 +85,8 @@ export default function QuoteModal({
   const [errors, setErrors] = useState<Partial<typeof form>>({});
   const [submitted, setSubmitted] = useState(false);
   const [showStumpDetails, setShowStumpDetails] = useState(false);
+  const [photos, setPhotos] = useState<{ dataUrl: string; name: string }[]>([]);
+  const [photoError, setPhotoError] = useState<string>("");
 
   const mutation = useCreateQuote();
 
@@ -116,6 +118,7 @@ export default function QuoteModal({
           email: form.email.trim(),
           address: form.address.trim(),
           notes: buildNoteSummary(stumps, servicePackage, pb, form.notes.trim()),
+          photos: photos.map(p => p.dataUrl),
           stumpCount,
           servicePackage: SERVICE_LABEL_MAP[servicePackage] ?? servicePackage,
           estimatedTotal,
@@ -127,11 +130,39 @@ export default function QuoteModal({
     );
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhotoError("");
+    const files = Array.from(e.target.files ?? []);
+    if (photos.length + files.length > 5) {
+      setPhotoError("Maximum 5 photos allowed.");
+      return;
+    }
+    files.forEach(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        setPhotoError("Each photo must be under 5 MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        setPhotos(prev => [...prev, { dataUrl: ev.target?.result as string, name: file.name }]);
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = "";
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+    setPhotoError("");
+  };
+
   const handleClose = () => {
     setForm({ name: "", phone: "", email: "", address: "", notes: "" });
     setErrors({});
     setSubmitted(false);
     setShowStumpDetails(false);
+    setPhotos([]);
+    setPhotoError("");
     mutation.reset();
     onClose();
   };
@@ -399,6 +430,61 @@ export default function QuoteModal({
                     fontFamily: "inherit",
                   }}
                 />
+              </div>
+
+              {/* Photo upload */}
+              <div style={{ marginBottom: 20 }}>
+                <label style={labelStyle}>Photos (optional, up to 5)</label>
+                <label style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  gap: 8, padding: "12px", borderRadius: 10,
+                  border: "1.5px dashed #ccc", cursor: "pointer",
+                  background: "#fafafa", color: "#666", fontSize: "0.88rem",
+                  transition: "border-color 0.15s",
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  {photos.length === 0 ? "Upload photos of your stumps" : `Add more (${photos.length}/5)`}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handlePhotoChange}
+                    disabled={photos.length >= 5}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {photoError && <div style={errorStyle}>{photoError}</div>}
+
+                {/* Thumbnails */}
+                {photos.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 10 }}>
+                    {photos.map((p, i) => (
+                      <div key={i} style={{ position: "relative" }}>
+                        <img
+                          src={p.dataUrl}
+                          alt={p.name}
+                          style={{
+                            width: 70, height: 70, objectFit: "cover",
+                            borderRadius: 8, border: "1px solid #eee",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(i)}
+                          style={{
+                            position: "absolute", top: -6, right: -6,
+                            width: 20, height: 20, borderRadius: "50%",
+                            border: "none", background: "#111", color: "white",
+                            fontSize: "0.7rem", cursor: "pointer",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                          }}
+                        >✕</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <PriceBreakdownTable />

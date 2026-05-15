@@ -22,6 +22,7 @@ async function sendQuoteEmail(data: {
   email: string;
   address: string;
   notes: string;
+  photos?: string[];
   stumpCount: number;
   servicePackage: string;
   estimatedTotal: number;
@@ -34,6 +35,11 @@ async function sendQuoteEmail(data: {
 
   const notesLine = data.notes
     ? `<tr><td style="padding:8px 0;color:#666;width:140px;">Notes</td><td style="padding:8px 0;font-weight:600;">${data.notes}</td></tr>`
+    : "";
+
+  const photoCount = data.photos?.length ?? 0;
+  const photosLine = photoCount > 0
+    ? `<tr style="border-top:1px solid #eee;"><td style="padding:8px 0;color:#666;">Photos</td><td style="padding:8px 0;font-weight:600;">${photoCount} attached</td></tr>`
     : "";
 
   const html = `
@@ -64,6 +70,7 @@ async function sendQuoteEmail(data: {
           <tr style="border-top:1px solid #eee;"><td style="padding:8px 0;color:#666;">Email</td><td style="padding:8px 0;font-weight:600;"><a href="mailto:${data.email}" style="color:#2d5e2b;">${data.email}</a></td></tr>
           <tr style="border-top:1px solid #eee;"><td style="padding:8px 0;color:#666;">Address</td><td style="padding:8px 0;font-weight:600;">${data.address}</td></tr>
           ${notesLine}
+          ${photosLine}
         </table>
 
         <div style="margin-top:24px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px;">
@@ -73,12 +80,26 @@ async function sendQuoteEmail(data: {
     </div>
   `;
 
+  const attachments = (data.photos ?? []).map((dataUrl, i) => {
+    const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
+    if (!matches) return null;
+    const [, mimeType, base64Data] = matches;
+    const ext = mimeType.split("/")[1] ?? "jpg";
+    return {
+      filename: `stump-photo-${i + 1}.${ext}`,
+      content: base64Data,
+      encoding: "base64" as const,
+      contentType: mimeType,
+    };
+  }).filter(Boolean);
+
   await transporter.sendMail({
     from: '"Stephenson Stump Grinding" <stephensonstump@gmail.com>',
     to: "stephensonstump@gmail.com",
     subject: `New Quote Request — ${data.name} (${data.stumpCount} stump${data.stumpCount !== 1 ? "s" : ""})`,
     html,
     replyTo: data.email,
+    attachments,
   });
 }
 
@@ -90,7 +111,7 @@ router.post("/quotes", async (req, res): Promise<void> => {
     return;
   }
 
-  const { name, phone, email, address, notes, stumpCount, servicePackage, estimatedTotal } = parsed.data;
+  const { name, phone, email, address, notes, photos, stumpCount, servicePackage, estimatedTotal } = parsed.data;
 
   const [quote] = await db
     .insert(quotesTable)
@@ -108,7 +129,7 @@ router.post("/quotes", async (req, res): Promise<void> => {
 
   req.log.info({ quoteId: quote.id }, "Quote request created");
 
-  sendQuoteEmail({ name, phone, email, address, notes: notes ?? "", stumpCount, servicePackage, estimatedTotal })
+  sendQuoteEmail({ name, phone, email, address, notes: notes ?? "", photos, stumpCount, servicePackage, estimatedTotal })
     .then(() => req.log.info({ quoteId: quote.id }, "Quote email sent"))
     .catch(err => req.log.error({ err, quoteId: quote.id }, "Failed to send quote email"));
 

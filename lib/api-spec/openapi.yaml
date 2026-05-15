@@ -85,6 +85,11 @@ components:
           type: string
         notes:
           type: string
+        photos:
+          type: array
+          items:
+            type: string
+          description: Base64-encoded image data URLs
         stumpCount:
           type: integer
         servicePackage:
