@@ -160,9 +160,6 @@ export default function Home() {
               letterSpacing: "-0.3px",
               lineHeight: 1.2,
               transition: "font-size 0.3s ease",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
             }}>Stephenson Stump Grinding</div>
             {!isMobile && (
               <div style={{
