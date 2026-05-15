@@ -113,7 +113,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh", paddingBottom: isMobile ? 80 : 0 }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#f5f5f3", color: "#111", minHeight: "100vh" }}>
 
       {/* HEADER SPACER — prevents content from hiding under fixed header */}
       <div style={{
@@ -329,20 +329,22 @@ export default function Home() {
           <p style={{ color: "#555", lineHeight: 1.7, maxWidth: 620, fontSize: "1.05rem" }}>
             Stephenson Stump Grinding provides efficient stump grinding and removal services with transparent pricing and optional cleanup packages.
           </p>
-          <div style={{ marginTop: 34 }}>
-            <button
-              onClick={scrollToCalculator}
-              style={{
-                border: "none", background: "#111", color: "white",
-                padding: "16px 24px", borderRadius: 14, fontWeight: 600,
-                cursor: "pointer", fontSize: "1rem", transition: "background 0.2s ease",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = "#2b2b2b")}
-              onMouseLeave={e => (e.currentTarget.style.background = "#111")}
-            >
-              Get Instant Estimate
-            </button>
-          </div>
+          {!isMobile && (
+            <div style={{ marginTop: 34 }}>
+              <button
+                onClick={scrollToCalculator}
+                style={{
+                  border: "none", background: "#111", color: "white",
+                  padding: "16px 24px", borderRadius: 14, fontWeight: 600,
+                  cursor: "pointer", fontSize: "1rem", transition: "background 0.2s ease",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#2b2b2b")}
+                onMouseLeave={e => (e.currentTarget.style.background = "#111")}
+              >
+                Get Instant Estimate
+              </button>
+            </div>
+          )}
         </div>
 
         <div style={{ background: "#111", color: "white", padding: 40, borderRadius: 28 }}>
@@ -923,29 +925,22 @@ export default function Home() {
         onClose={() => setPhoneModalOpen(false)}
       />
 
-      {/* Sticky bottom CTA — mobile only */}
+      {/* Floating CTA — mobile only, bottom-left */}
       {isMobile && (
-        <div style={{
-          position: "fixed", bottom: 0, left: 0, right: 0,
-          zIndex: 100,
-          background: "white",
-          borderTop: "1px solid #e5e5e3",
-          padding: "12px 20px",
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.08)",
-        }}>
-          <button
-            onClick={scrollToCalculator}
-            style={{
-              width: "100%", border: "none",
-              background: "#111", color: "white",
-              padding: "16px 24px", borderRadius: 14,
-              fontWeight: 600, fontSize: "1rem",
-              cursor: "pointer",
-            }}
-          >
-            Get Instant Estimate
-          </button>
-        </div>
+        <button
+          onClick={scrollToCalculator}
+          style={{
+            position: "fixed", bottom: 20, left: 16,
+            zIndex: 100,
+            border: "none", background: "#111", color: "white",
+            padding: "12px 18px", borderRadius: 999,
+            fontWeight: 600, fontSize: "0.85rem",
+            cursor: "pointer",
+            boxShadow: "0 4px 18px rgba(0,0,0,0.22)",
+          }}
+        >
+          Get Instant Estimate
+        </button>
       )}
 
       <style>{`
